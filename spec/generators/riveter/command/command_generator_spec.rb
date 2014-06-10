@@ -1,58 +1,82 @@
 require 'spec_helper'
 require 'generators/riveter/command/command_generator'
-require 'fileutils'
 
 describe Riveter::Generators::CommandGenerator, :type => :generator do
-  it "creates the command with defaults" do
-    gen = generator %w(create_something --no-command-controller)
-    expect(gen).to receive(:create_command_file)
-    capture(:stdout) { gen.invoke_all }
+  before do
+    FileUtils.mkdir_p(file('config'))
+    File.open(file('config/routes.rb'), 'w') {|f| f.write "TestApp::Application.routes.draw do\nend\n" }
   end
 
-  it "creates the command with specified attributes" do
-    gen = generator %w(create_something name:string:required active:boolean other --no-command-controller)
+  it "should run all tasks in the generator" do
+    gen = generator %w(foo_bar)
     expect(gen).to receive(:create_command_file)
-    capture(:stdout) { gen.invoke_all }
-  end
-
-  it "creates a module file" do
-    gen = generator %w(test_ns/create_something name:string:required active:boolean other --no-command-controller)
     expect(gen).to receive(:create_module_file)
-    capture(:stdout) { gen.invoke_all }
-  end
-
-  it "creates a locale file if it doesn't exist" do
-    gen = generator %w(create_something --no-command-controller)
     expect(gen).to receive(:create_locale_file)
     capture(:stdout) { gen.invoke_all }
   end
 
-  it "skips creating a locale file if it exists" do
-    pending
-  end
-
   describe "the generated files" do
     describe "the command" do
-      before do
-        run_generator %w(create_something name:string:required active:boolean other --no-command-controller)
+      describe "with defaults" do
+        before do
+          run_generator %w(foo_bar)
+        end
+
+        subject { file('app/commands/foo_bar_command.rb') }
+
+        it { should exist }
+        it { should contain('class FooBarCommand') }
       end
 
-      subject { file('app/commands/create_something_command.rb') }
+      describe "with attributes" do
+        before do
+          run_generator %w(foo_bar name:string:required active:boolean other)
+        end
+
+        subject { file('app/commands/foo_bar_command.rb') }
+
+        it { should exist }
+        it { should contain('class FooBarCommand') }
+        it { should contain('attr_string :name, :required => true') }
+        it { should contain('attr_boolean :active') }
+        it { should contain('attr_string :other') }
+      end
+    end
+
+    describe "the module" do
+      before do
+        run_generator %w(test_ns/foo_bar)
+      end
+
+      subject { file('app/commands/test_ns.rb') }
 
       it { should exist }
     end
 
-    describe "the commands.en.yml locale" do
-      before do
-        FileUtils.mkdir_p(file('config/locales'))
-        File.open(file('config/locales/commands.en.yml'), 'w') {|f| f.write 'empty' }
-        run_generator %w(create_something name:string:required active:boolean other --no-command-controller)
+    describe "the commands.en.yml" do
+      describe "creates when missing" do
+        before do
+          run_generator %w(foo_bar)
+        end
+
+        subject { file('config/locales/commands.en.yml') }
+
+        it { should exist }
+        it { should contain('commands:') }
       end
 
-      subject { file('config/locales/commands.en.yml') }
+      describe "skips when exists" do
+        before do
+          FileUtils.mkdir_p(file('config/locales'))
+          File.open(file('config/locales/commands.en.yml'), 'w') {|f| f.write 'untouched' }
+          run_generator %w(foo_bar)
+        end
 
-      it { should exist }
-      it { File.open(file('config/locales/commands.en.yml'), 'r') {|f| f.read }.should eq('empty') }
+        subject { file('config/locales/commands.en.yml') }
+
+        it { should exist }
+        it { should contain('untouched')}
+      end
     end
   end
 end

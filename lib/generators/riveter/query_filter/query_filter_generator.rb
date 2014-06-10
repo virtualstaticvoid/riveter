@@ -21,7 +21,7 @@ module Riveter
 
       def create_module_file
         return if regular_class_path.empty?
-        template 'module.rb', File.join('app/enums', "#{class_path.join('/')}.rb") if behavior == :invoke
+        template 'module.rb', File.join('app/query_filters', "#{class_path.join('/')}.rb") if behavior == :invoke
       end
 
       def create_locale_file

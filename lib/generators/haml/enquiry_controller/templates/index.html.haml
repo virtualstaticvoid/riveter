@@ -1,0 +1,57 @@
+%h1 <%= class_name %>Enquiry
+%p Find me in '<%= args.first %>'.
+
+.filter
+
+  %h2 Search
+
+    = enquiry_form_for(@enquiry, :html => {:class => 'form-horizontal'}) do |f|
+<% if defined?(SimpleForm) -%>
+      = f.error_notification
+<% else -%>
+      - if f.object.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(f.object.errors.count, "error")} prohibited performing this enquiry:"
+          %ul
+            - f.object.errors.full_messages.each do |msg|
+              %li= msg
+<%end -%>
+
+      .form-inputs
+<% if filter_attributes.any? -%>
+<% filter_attributes.each do |attribute| -%>
+        = f.input :<%= attribute.name %><%= attribute.inject_options %>
+<% end -%>
+<% else -%>
+        -# TODO: provide inputs for each attribute
+<% end -%>
+
+      .form-actions
+        = f.submit
+        = f.reset
+
+.results
+
+  %h2 Listing <%= class_name.underscore.humanize.pluralize %>
+
+  %table.table.table-bordered
+    %tr
+      %th Col1
+      %th Col2
+
+    - unless @enquiry.has_data?
+      %tr
+        %td(colspan="2")
+          .no-data-message Invalid criteria or no items found...
+    - else
+      - @enquiry.find_each do |result|
+        %tr
+          %td= result.col1
+          %td= result.col2
+
+  - if @enquiry.has_data?
+<% if defined?(Kaminari) -%>
+    = paginate @enquiry.query.relation
+<% else -%>
+    -# TODO: provide pagination outputs against `@enquiry.query.relation`
+<% end -%>

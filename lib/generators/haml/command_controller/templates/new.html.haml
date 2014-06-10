@@ -1,0 +1,26 @@
+%h1 <%= class_name %>Command
+%p Find me in '<%= args.first %>'.
+
+= command_form_for(@command, :html => {:class => 'form-vertical'}) do |f|
+<% if defined?(SimpleForm) -%>
+  = f.error_notification
+<% else -%>
+  - if @command.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@command.errors.count, "error")} prohibited performing this action:"
+      %ul
+        - @command.errors.full_messages.each do |msg|
+          %li= msg
+<%end -%>
+
+  .form-inputs
+<% if command_attributes.any? -%>
+<% command_attributes.each do |attribute| -%>
+    = f.input :<%= attribute.name %><%= attribute.inject_options %>
+<% end -%>
+<% else -%>
+    -# TODO: provide inputs for each attribute
+<% end -%>
+
+  .form-actions
+    = f.submit

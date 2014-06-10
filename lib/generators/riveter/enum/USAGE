@@ -1,0 +1,41 @@
+Description:
+  Stubs out a enumeration module. Pass the enumeration name, either CamelCased or
+  under_scored, and an optional list of member value pairs as arguments.
+  "Enum" will be appended to the name of the module.
+
+  Member pairs are member:value arguments specifying the members and optionally their values.
+  If the value part is omitted, an integer value will be assigned, based on the members position
+  in the list of member arguments
+
+  You don't have to think up every member up front, but it helps to
+  sketch out a few so you can start working with the enumeration immediately.
+
+  This generator invokes your configured test framework which defaults to TestUnit
+
+  If you pass a namespaced enumeration name (e.g. admin/account_type or Admin::AccountType)
+  then the generator will create a module (e.g. admin_account_type)
+
+Examples:
+  `rails generate riveter:enum account_type`
+
+    Creates an enumeration module
+
+      Enum: app/enums/account_type_enum.rb
+
+  `rails generate riveter:enum admin/account_type`
+
+    Creates an enumeration module within the admin namespace
+
+      Enum: app/enums/admin/account_type_enum.rb
+
+  `rails generate riveter:enum account_type local foreign`
+
+    Creates an enumeration module, with "Local" and "Foreign" as members with default integer values
+
+      Enum: app/enums/account_type_enum.rb
+
+  `rails generate riveter:enum account_type local:1 foreign:2`
+
+    Creates an enumeration module, with "Local" and "Foreign" as members with the values 1 and 2 respectively
+
+      Enum: app/enums/account_type_enum.rb

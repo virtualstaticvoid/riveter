@@ -1,0 +1,22 @@
+Description:
+  Stubs out a new query. Pass the model name, either CamelCased or
+  under_scored as the model to base the query on.
+  "Query" will be appended to the name of the query class.
+
+  This generator invokes your configured test framework which defaults to TestUnit
+
+  If you pass a namespaced model name (e.g. admin/account or Admin::Account)
+  then the generator will create a module (e.g. admin_account)
+
+Examples:
+  `rails generate riveter:query portfolio`
+
+    Creates a query class based off of the Portfolio model
+
+      Query: app/queries/portfolio_query.rb
+
+  `rails generate riveter:query admin/account`
+
+    Creates a query class based off of the Admin::Account model
+
+      Query: app/queries/admin/account_query.rb

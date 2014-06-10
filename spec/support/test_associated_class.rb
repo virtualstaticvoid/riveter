@@ -1,0 +1,2 @@
+class TestAssociatedClass
+end

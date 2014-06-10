@@ -57,9 +57,9 @@ describe Riveter::Command do
 
       it "should invoke associated service" do
         allow(subject).to receive(:valid?) { true }
-        expect_any_instance_of(TestService).to receive(:perform) { true }
+        expect_any_instance_of(TestService).to receive(:perform).with(subject, :arg) { true }
 
-        subject.submit(:name => 'test')
+        subject.submit(:arg, :name => 'test')
       end
     end
   end

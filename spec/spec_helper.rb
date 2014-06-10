@@ -15,6 +15,7 @@ require 'haml'
 require 'rspec/autorun'
 require 'shoulda/matchers'
 require 'ammeter/init'
+require 'fileutils'
 require 'simplecov'
 require 'pry'
 

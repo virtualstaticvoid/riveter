@@ -11,6 +11,7 @@ script: 'bundle exec rake spec'
 
 notifications:
   email:
-    - virtualstaticvoid@gmail.com
+    recipients:
+      - virtualstaticvoid@gmail.com
     on_failure: change
     on_success: never

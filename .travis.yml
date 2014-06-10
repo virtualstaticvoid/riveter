@@ -1,0 +1,16 @@
+language: ruby
+cache: bundler
+
+rvm:
+  - 2.0.0
+  - 2.1.0
+  - 2.1.1
+  - 2.1.2
+
+script: 'bundle exec rake spec'
+
+notifications:
+  email:
+      - virtualstaticvoid@gmail.com
+    on_failure: change
+    on_success: never

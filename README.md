@@ -1,4 +1,4 @@
-# Riveter
+# Riveter [![Build Status](https://secure.travis-ci.org/virtualstaticvoid/riveter.png?branch=master)](http://travis-ci.org/virtualstaticvoid/riveter) [![Code Climate](https://codeclimate.com/github/virtualstaticvoid/riveter.png)](https://codeclimate.com/github/virtualstaticvoid/riveter)
 
 Provides several useful patterns, packaged in a gem, for use in Rails.
 Includes generators to help you improve consistency in your applications.
@@ -74,4 +74,4 @@ This will create a query with `filter1` string attribute and `filter2` integer a
 5. Create new Pull Request
 
 ## License
-Released under the MIT License.  See the [LICENSE][LICENSE.txt] file for further details.
+Released under the MIT License.  See the [LICENSE](LICENSE.txt) file for further details.

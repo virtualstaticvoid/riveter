@@ -16,7 +16,7 @@ module Riveter
       end
 
       def create_enum_file
-        template 'enum.rb', File.join('app/enums', class_path, "#{file_name}.rb")
+        template 'enum.rb', File.join('app/enums', class_path, "#{file_name}_enum.rb")
       end
 
       def create_module_file

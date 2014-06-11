@@ -2,11 +2,20 @@ require 'spec_helper'
 require 'generators/riveter/query_filter/query_filter_generator'
 
 describe Riveter::Generators::QueryFilterGenerator, :type => :generator do
+  before do
+    FileUtils.mkdir_p(file('config/locales'))
+    File.open(file('config/routes.rb'), 'w') {|f| f.write "TestApp::Application.routes.draw do\nend\n" }
+  end
+
   it "should run all tasks in the generator" do
     gen = generator %w(foo_bar)
     expect(gen).to receive(:create_query_filter_file)
     expect(gen).to receive(:create_module_file)
     expect(gen).to receive(:create_locale_file)
+
+    # hooks
+    expect(gen).to receive(:_invoke_from_option_test_framework)
+
     capture(:stdout) { gen.invoke_all }
   end
 
@@ -38,40 +47,7 @@ describe Riveter::Generators::QueryFilterGenerator, :type => :generator do
       end
     end
 
-    describe "the module" do
-      before do
-        run_generator %w(test_ns/foo_bar)
-      end
-
-      subject { file('app/query_filters/test_ns.rb') }
-
-      it { should exist }
-    end
-
-    describe "the commands.en.yml" do
-      describe "creates when missing" do
-        before do
-          run_generator %w(foo_bar)
-        end
-
-        subject { file('config/locales/query_filters.en.yml') }
-
-        it { should exist }
-        it { should contain('query_filters:') }
-      end
-
-      describe "skips when exists" do
-        before do
-          FileUtils.mkdir_p(file('config/locales'))
-          File.open(file('config/locales/query_filters.en.yml'), 'w') {|f| f.write 'untouched' }
-          run_generator %w(foo_bar)
-        end
-
-        subject { file('config/locales/query_filters.en.yml') }
-
-        it { should exist }
-        it { should contain('untouched')}
-      end
-    end
+    it_should_behave_like 'a generator with a module', 'app/query_filters'
+    it_should_behave_like 'a generator with locale file output', 'query_filters'
   end
 end

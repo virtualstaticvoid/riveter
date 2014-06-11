@@ -12,6 +12,11 @@ describe Riveter::Generators::EnquiryControllerGenerator, :type => :generator do
     expect(gen).to receive(:create_enquiry_controller_file)
     expect(gen).to receive(:create_module_file)
     expect(gen).to receive(:add_enquiry_route)
+
+    # hooks
+    expect(gen).to receive(:_invoke_from_option_template_engine)
+    expect(gen).to receive(:_invoke_from_option_test_framework)
+
     capture(:stdout) { gen.invoke_all }
   end
 
@@ -40,24 +45,7 @@ describe Riveter::Generators::EnquiryControllerGenerator, :type => :generator do
       end
     end
 
-    describe "the module" do
-      before do
-        run_generator %w(test_ns/foo_bar)
-      end
-
-      subject { file('app/controllers/test_ns.rb') }
-
-      it { should exist }
-    end
-
-    describe "the route" do
-      before do
-        run_generator %w(foo_bar)
-      end
-
-      subject { file('config/routes.rb') }
-
-      it { should contain('enquiry :foo_bar') }
-    end
+    it_should_behave_like 'a generator with a module', 'app/controllers'
+    it_should_behave_like 'a generator with output to routes', 'enquiry :foo_bar'
   end
 end

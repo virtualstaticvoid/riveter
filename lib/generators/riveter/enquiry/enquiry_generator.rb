@@ -14,6 +14,11 @@ module Riveter
 
       check_class_collision :suffix => 'Enquiry'
 
+      argument :filter_attributes,
+               :type => :array,
+               :default => [],
+               :banner => "[attribute[:type[:required]] attribute[:type[:required]]]"
+
       def create_enquiry_file
         template 'enquiry.rb', File.join('app/enquiries', class_path, "#{file_name}_enquiry.rb")
       end

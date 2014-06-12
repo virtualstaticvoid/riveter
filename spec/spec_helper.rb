@@ -15,6 +15,7 @@ require 'haml'
 require 'rspec/autorun'
 require 'shoulda/matchers'
 require 'ammeter/init'
+
 require 'fileutils'
 require 'simplecov'
 require 'pry'
@@ -22,22 +23,6 @@ require 'pry'
 SimpleCov.start do
   add_filter 'spec'
 end
-
-class TestApp < Rails::Application
-  config.root = File.dirname(__FILE__)
-end
-Rails.application = TestApp
-
-module Rails
-  def self.root
-    @root ||= File.expand_path(File.join(File.dirname(__FILE__), '..', 'tmp', 'rails'))
-  end
-end
-Rails.application.config.root = Rails.root
-
-# Call configure to load the settings from
-# Rails.application.config.generators to Rails::Generators
-Rails::Generators.configure! Rails.application.config.generators
 
 # require supporting ruby files with custom matchers and macros, etc
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].each {|f| require f }

@@ -37,7 +37,7 @@ module Haml
             when :integer, :decimal, :boolean, :date, :time, :datetime
               ", :as => :#{type}"
             when :enum
-              ", :collection => #{name.titleize}.collection"
+              ", :collection => #{name.titleize}Enum.collection"
             when :model
               ", :collection => #{name.titleize}.all"
             else

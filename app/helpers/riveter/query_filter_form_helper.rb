@@ -4,7 +4,7 @@ module Riveter
       query_filter_class_name = query_filter.class.name.underscore
       options = {
         :as => query_filter_class_name.gsub(/_query_filter$/, ''),
-        :url => query_filter_class_name,
+        :url => query_filter_class_name.gsub(/_query_filter$/, ''),
         :method => :get
       }.merge(options)
 

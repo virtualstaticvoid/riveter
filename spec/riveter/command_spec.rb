@@ -15,6 +15,11 @@ describe Riveter::Command do
       it { should respond_to(:i18n_scope) }
       it { subject.i18n_scope.should eq(:commands) }
     end
+
+    describe ".success_notice" do
+      it { should respond_to(:success_notice) }
+      it { subject.success_notice.should eq('Successfully executed Test command.') }
+    end
   end
 
   describe "instance" do

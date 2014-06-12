@@ -34,14 +34,19 @@ describe Haml::Generators::CommandControllerGenerator, :type => :generator do
 
       describe "with specified action name and attributes" do
         before do
-          run_generator %w(foo_bar create name:string:required active:boolean other)
+          run_generator %w(foo_bar baz qux:string quux:string:required corge:enum grault:boolean garply:model other)
         end
 
-        subject { file('app/views/foo_bar_command/create.html.haml') }
+        subject { file('app/views/foo_bar_command/baz.html.haml') }
 
         it { should exist }
         it { should contain('= command_form_for') }
-        it { should contain('= f.input :name') }
+        it { should contain('= f.input :qux') }
+        it { should contain('= f.input :quux') }
+        it { should contain('= f.input :corge, :collection => CorgeEnum.collection') }
+        it { should contain('= f.input :grault') }
+        it { should contain('= f.input :garply, :collection => Garply.all') }
+        it { should contain('= f.input :other') }
       end
     end
   end

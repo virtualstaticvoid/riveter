@@ -32,7 +32,7 @@ module Riveter
 
       def resolve!(type)
         registered = self.resolve(type)
-        raise UnregisteredType.new(type) unless registered
+        raise UnregisteredTypeError.new(type) unless registered
         registered
       end
 
@@ -41,8 +41,7 @@ module Riveter
       end
 
       def resolve_all(type)
-        key = key_for(type)
-        container.registry.key?(key) ? container.registry[key] : []
+        container.registry[key_for(type)] || []
       end
     end
   end
@@ -53,10 +52,11 @@ module Riveter
     end
   end
 
-  class UnregisteredType < Exception
+  class UnregisteredTypeError < StandardError
     attr_reader :type
 
     def initialize(type)
+      super "Unregistered type '#{type}'"
       @type = type
     end
   end

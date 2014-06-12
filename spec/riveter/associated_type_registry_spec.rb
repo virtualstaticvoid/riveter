@@ -82,10 +82,10 @@ describe Riveter::AssociatedTypeRegistry do
   end
 
   describe "#resolve!" do
-    it "should raise UnregisteredType for an unregistered type" do
+    it "should raise UnregisteredTypeError for an unregistered type" do
       expect {
         subject.resolve!(Class)
-      }.to raise_error(Riveter::UnregisteredType)
+      }.to raise_error(Riveter::UnregisteredTypeError)
     end
 
     it "should include the unknown type in the error" do
@@ -103,7 +103,7 @@ describe Riveter::AssociatedTypeRegistry do
       }
     }
 
-    it "should not raise UnregisteredType for a registered type" do
+    it "should not raise UnregisteredTypeError for a registered type" do
       expect {
         subject.resolve!(TestAssociatedClass)
       }.to_not raise_error

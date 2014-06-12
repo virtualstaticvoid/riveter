@@ -63,7 +63,7 @@ module Riveter
             end
           RUBY
 
-          self.include ActionsAndSupport
+          include ActionsAndSupport
         end
       end
     end

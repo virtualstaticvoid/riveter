@@ -1,3 +1,6 @@
+require_relative 'test_model'
+require_relative 'test_enum'
+
 class TestClassWithAttributes
   include Riveter::Attributes
 

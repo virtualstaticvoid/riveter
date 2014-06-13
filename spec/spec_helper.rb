@@ -1,6 +1,12 @@
 require 'bundler/setup'
 Bundler.setup
 
+require 'coveralls'
+
+Coveralls.wear!
+
+require 'pry'
+
 require 'riveter'
 require 'riveter/spec_helper'
 
@@ -18,13 +24,6 @@ require 'shoulda/matchers'
 require 'ammeter/init'
 
 require 'fileutils'
-require 'simplecov'
-require 'pry'
-
-SimpleCov.start do
-  add_filter 'spec'
-  add_filter 'vendor'
-end
 
 # require supporting ruby files with custom matchers and macros, etc
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].each {|f| require f }

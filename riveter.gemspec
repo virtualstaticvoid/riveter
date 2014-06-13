@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'shoulda-matchers', '~> 2.6.1'
   spec.add_development_dependency 'ammeter'
-  spec.add_development_dependency 'simplecov', '~> 0.7.1'
+  spec.add_development_dependency "coveralls"
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'pry-byebug'
 end

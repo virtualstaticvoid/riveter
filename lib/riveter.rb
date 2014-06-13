@@ -7,7 +7,6 @@ require 'validates_timeliness'
 
 require 'active_support/core_ext'
 require 'active_support/inflector'
-require 'active_support/inflector'
 
 module Riveter
   autoload :AttributeDefaultValues, 'riveter/attribute_default_values'

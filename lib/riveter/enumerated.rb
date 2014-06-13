@@ -4,25 +4,30 @@ module Riveter
 
     included do
 
-      const_names = self.constants(false)
-      const_values = const_names.collect {|name| self.const_get(name) }
+      const_names = self.constants(false).freeze
+      const_values = const_names.collect {|name| self.const_get(name) }.freeze
 
       # create hashes for decoding names and values
       const_value_lookup ||= const_names.inject({}) {|list, name|
         list[name] = self.const_get(name)
         list
-      }.with_indifferent_access
+      }.with_indifferent_access.freeze
 
       const_name_lookup ||= const_names.inject({}) {|list, name|
         list[self.const_get(name)] = name
         list
-      }
+      }.freeze
 
       # define helper methods
 
       # returns an array of the constant names as symbols
       define_singleton_method :names do
         const_names
+      end
+
+      # returns an array of the constant names as symbols
+      define_singleton_method :values do
+        const_values
       end
 
       # returns an array of constant values
@@ -64,7 +69,7 @@ module Riveter
 
       # for use within form select inputs
       define_singleton_method :collection do
-        self.const_get(:All).collect {|m| [m.human, m.value] }
+        self.const_get(:All).collect {|m| [m.human, m.name] }
       end
     end
 

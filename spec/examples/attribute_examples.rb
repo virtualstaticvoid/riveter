@@ -1,7 +1,11 @@
 require 'spec_helper'
 
-shared_examples_for "an attribute" do |type, default_value, another_value, *args, &block|
+shared_examples_for "an attribute" do |type, default_value, *args, &block|
   options = args.extract_options!
+
+  # override these in "calling" specs
+  let(:assigned_value) { default_value }
+  let(:expected_value) { assigned_value }
 
   describe type do
     let(:name) { "a_#{type}" }
@@ -18,15 +22,15 @@ shared_examples_for "an attribute" do |type, default_value, another_value, *args
       it { instance.should respond_to("#{name}=")}
 
       it "assigns attribute in initializer" do
-        a = subject.new(name => another_value)
-        a.send(name).should eq(another_value)
-        a.attributes[name].should eq(another_value)
+        a = subject.new(name => assigned_value)
+        a.send(name).should eq(expected_value)
+        a.attributes[name].should eq(expected_value)
       end
 
       it "assigns attribute" do
         a = subject.new()
-        a.send("#{name}=", another_value)
-        a.attributes[name].should eq(another_value)
+        a.send("#{name}=", assigned_value)
+        a.attributes[name].should eq(expected_value)
       end
     end
 
@@ -44,6 +48,19 @@ shared_examples_for "an attribute" do |type, default_value, another_value, *args
       end
 
       it { instance.send(name).should eq(default_value)}
+    end
+
+    describe "with supplied converter block" do
+      let(:mock_block) { Mock::Block.new() }
+
+      before do
+        subject.send :"attr_#{type}", name, *args, options.merge(:default => default_value), &mock_block
+      end
+
+      it {
+        expect(mock_block).to receive(:call).at_least(:once)
+        instance.send(name)
+      }
     end
   end
 end

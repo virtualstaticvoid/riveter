@@ -2,6 +2,7 @@ require 'bundler/setup'
 Bundler.setup
 
 require 'riveter'
+require 'riveter/spec_helper'
 
 # NB: sync these requires from the Railtie
 require 'riveter/form_builder_extensions'

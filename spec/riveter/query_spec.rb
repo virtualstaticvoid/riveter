@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'riveter/spec_helper'
 
 describe Riveter::Query do
   describe "#initialize" do

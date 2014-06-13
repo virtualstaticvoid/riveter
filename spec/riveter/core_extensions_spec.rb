@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'riveter/spec_helper'
 require 'riveter/core_extensions'
 
 describe Riveter::CoreExtensions do

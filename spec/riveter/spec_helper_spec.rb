@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'riveter/spec_helper'
 
 describe "Spec Helper" do
   describe Mock::Block do

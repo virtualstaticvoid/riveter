@@ -24,11 +24,18 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :string, 'A', 'B'
+    it_should_behave_like "an attribute", :string, 'A' do
+      let(:assigned_value) { 'B' }
+    end
 
-    it_should_behave_like "an attribute", :text, 'B', 'C'
+    it_should_behave_like "an attribute", :text, 'B' do
+      let(:assigned_value) { 'C' }
+    end
 
-    it_should_behave_like "an attribute", :integer, 1, 2 do
+    it_should_behave_like "an attribute", :integer, 1 do
+      let(:assigned_value) { '2' }
+      let(:expected_value) { 2 }
+
       describe "additional" do
         before do
           subject.attr_integer :an_attribute
@@ -39,7 +46,10 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :date, Date.new(2010, 1, 12), Date.new(2010, 1, 13) do
+    it_should_behave_like "an attribute", :date, Date.new(2010, 1, 12) do
+      let(:assigned_value) { '2010-01-13' }
+      let(:expected_value) { Date.new(2010, 1, 13) }
+
       describe "additional" do
         before do
           subject.attr_date :an_attribute
@@ -50,7 +60,10 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :time, Time.new(2010, 1, 12, 8, 4, 45), Time.new(2010, 1, 12, 8, 4, 12) do
+    it_should_behave_like "an attribute", :time, Time.new(2010, 1, 12, 8, 4, 45) do
+      let(:assigned_value) { '2010-01-12 08:04:12 +0200' }
+      let(:expected_value) { Time.new(2010, 1, 12, 8, 4, 12) }
+
       describe "additional" do
         before do
           subject.attr_time :an_attribute
@@ -61,7 +74,10 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :boolean, true, false do
+    it_should_behave_like "an attribute", :boolean, true do
+      let(:assigned_value) { '0' }
+      let(:expected_value) { false }
+
       describe "additional" do
         before do
           subject.attr_boolean :an_attribute
@@ -72,10 +88,13 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :enum, TestEnum::Member1, TestEnum::Member2, TestEnum do
+    it_should_behave_like "an attribute", :enum, TestEnum::Member1, TestEnum do
+      let(:assigned_value) { 'Member2' }
+      let(:expected_value) { TestEnum::Member2 }
+
       describe "additional" do
         before do
-          subject.attr_enum :product_type, TestEnum
+          subject.attr_enum :product_type, TestEnum, :required => true
         end
         let(:instance) { subject.new() }
 
@@ -88,11 +107,24 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :array, [1, 2, 3], [5, 6]
+    it_should_behave_like "an attribute", :array, [1, 2, 3] do
+      let(:assigned_value) { %w(5 6 7) }
+      let(:expected_value) { [5, 6, 7] }
+    end
 
-    it_should_behave_like "an attribute", :hash, {:a => :b}, {:c => :d}
+    it_should_behave_like "an attribute", :hash, {:a => :b} do
+      let(:assigned_value) { {:c => '1', :d => '2'} }
+      let(:expected_value) { {:c => 1, :d => 2} }
+    end
 
-    it_should_behave_like "an attribute", :model, TestModel.new(), TestModel.new(), TestModel do
+    it_should_behave_like "an attribute", :model, 1, TestModel do
+
+      before do
+        allow_any_instance_of(TestModel).to receive(:find_by) { self }
+      end
+
+      let(:assigned_value) { TestModel.new() }
+
       describe "additional" do
         before do
           subject.attr_model :product, TestModel
@@ -103,7 +135,9 @@ describe Riveter::Attributes do
       end
     end
 
-    it_should_behave_like "an attribute", :object, Object.new(), Object.new()
+    it_should_behave_like "an attribute", :object, Object.new() do
+      let(:assigned_value) { Object.new() }
+    end
   end
 
   describe "instance" do

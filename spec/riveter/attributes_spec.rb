@@ -61,7 +61,7 @@ describe Riveter::Attributes do
     end
 
     it_should_behave_like "an attribute", :time, Time.new(2010, 1, 12, 8, 4, 45) do
-      let(:assigned_value) { '2010-01-12 08:04:12 +0200' }
+      let(:assigned_value) { '2010-01-12 08:04:12' }
       let(:expected_value) { Time.new(2010, 1, 12, 8, 4, 12) }
 
       describe "additional" do

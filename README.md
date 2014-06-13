@@ -3,6 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/riveter.svg)](http://badge.fury.io/rb/riveter)
 [![Build Status](https://secure.travis-ci.org/virtualstaticvoid/riveter.png?branch=master)](http://travis-ci.org/virtualstaticvoid/riveter)
 [![Code Climate](https://codeclimate.com/github/virtualstaticvoid/riveter.png)](https://codeclimate.com/github/virtualstaticvoid/riveter)
+[![Coverage Status](https://coveralls.io/repos/virtualstaticvoid/riveter/badge.png)](https://coveralls.io/r/virtualstaticvoid/riveter)
 
 Provides several useful patterns, packaged in a gem, for use in Rails.
 Includes generators to help you improve consistency in your applications.

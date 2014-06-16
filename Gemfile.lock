@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    riveter (0.0.5)
+    riveter (0.0.6)
       actionpack
       activemodel
       activerecord

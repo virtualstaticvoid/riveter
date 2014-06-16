@@ -21,8 +21,8 @@ describe Riveter::Presenter do
     it { subject.to_presenter(TestPresenter).should_not be_nil }
     it { subject.to_presenter(TestPresenter).should be_instance_of(TestPresenter) }
 
-    it { OpenStruct.new(:name => :test).to_presenter(TestPresenter).should respond_to(:name) }
-    it { OpenStruct.new(:name => :test).to_presenter(TestPresenter).name.should eq(:test) }
+    it { double(:instance, :name => :test).to_presenter(TestPresenter).should respond_to(:name) }
+    it { double(:instance, :name => :test).to_presenter(TestPresenter).name.should eq(:test) }
   end
 
   describe "#with_presenter" do

@@ -9,7 +9,7 @@ describe <%= class_name %>Query do
       FactoryGirl.create_list :<%= class_name.underscore %>, 10
     end
 
-    let(:filter) { OpenStruct.new() }
+    let(:filter) { double(:filter) }
     subject { <%= class_name %>Query.new(filter) }
 
     it { subject.relation.should_not be_nil }
@@ -23,7 +23,7 @@ describe <%= class_name %>Query do
   end
 
   context "without data" do
-    let(:filter) { OpenStruct.new() }
+    let(:filter) { double(:filter) }
     subject { <%= class_name %>Query.new(filter) }
 
     it { subject.relation.should_not be_nil }

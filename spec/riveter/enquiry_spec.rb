@@ -120,7 +120,7 @@ describe Riveter::Enquiry do
       describe "called with a block" do
         it "invokes the block" do
           block = Mock::Block.new()
-          allow(subject).to receive(:create_query_filter) { OpenStruct.new(:valid? => true) }
+          allow(subject).to receive(:create_query_filter) { double(:filter, :valid? => true) }
 
           expect(block).to receive(:call).at_least(:once)
 
@@ -198,19 +198,19 @@ describe Riveter::Enquiry do
       describe "#submit" do
         it "yields the query for a valid filter" do
           query = Object.new()
-          expect(subject).to receive(:create_query_filter) { OpenStruct.new(:valid? => true) }
+          expect(subject).to receive(:create_query_filter) { double(:filter, :valid? => true) }
           expect(subject).to receive(:create_query) { query }
           subject.submit().should eq(query)
         end
 
         it "yields false for an invalid filter" do
-          expect(subject).to receive(:create_query_filter) { OpenStruct.new(:valid? => false) }
+          expect(subject).to receive(:create_query_filter) { double(:filter, :valid? => false) }
           subject.submit().should eq(false)
         end
 
         it "assigns query" do
           query = Object.new()
-          expect(subject).to receive(:create_query_filter) { OpenStruct.new(:valid? => true) }
+          expect(subject).to receive(:create_query_filter) { double(:filter, :valid? => true) }
           expect(subject).to receive(:create_query) { query }
           subject.submit()
           subject.query.should eq(query)
@@ -251,12 +251,12 @@ describe Riveter::Enquiry do
         end
 
         it "yields false when query empty" do
-          allow(subject).to receive(:query) { OpenStruct.new(:has_data? => false) }
+          allow(subject).to receive(:query) { double(:query, :has_data? => false) }
           subject.has_data?.should be_false
         end
 
         it "yields true when query data" do
-          allow(subject).to receive(:query) { OpenStruct.new(:has_data? => true) }
+          allow(subject).to receive(:query) { double(:query, :has_data? => true) }
           subject.has_data?.should be_true
         end
       end
@@ -269,7 +269,7 @@ describe Riveter::Enquiry do
         end
 
         it "yield query relation for a valid query" do
-          allow(subject).to receive(:query) { OpenStruct.new(:has_data? => true, :relation => []) }
+          allow(subject).to receive(:query) { double(:query, :has_data? => true, :relation => []) }
 
           subject.query_results.should eq([])
         end

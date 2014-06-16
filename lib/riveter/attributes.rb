@@ -169,18 +169,16 @@ module Riveter
         attr_reader_with_converter name, converter
 
         # only add validation of the model instance if supported
-        if model_or_scope.respond_to?(:valid?) && options[:validate]
-
-          validate :"validate_#{name}_model"
+        if model_or_scope.instance_methods.include?(:valid?) && options[:validate]
+          validate :"validate_#{name}"
 
           # need a "custom" associated validation since
           # we don't reference active record...
-          define_method :"validate_#{name}_model" do
+          define_method :"validate_#{name}" do
             instance = self.send(name)
             return unless required && instance.present?
             self.errors.add(name, :invalid) unless instance.valid?
           end
-
         end
 
         attr_writer name
@@ -394,7 +392,7 @@ module Riveter
 
         when :model
           lambda {|model, attrib, v|
-            model.find_by(attrib => v)
+            v.is_a?(model) ? v : model.find_by(attrib => v)
           }.curry[options[:model], options[:find_by]]
 
         else # object etc...

@@ -117,21 +117,38 @@ describe Riveter::Attributes do
       let(:expected_value) { {:c => 1, :d => 2} }
     end
 
-    it_should_behave_like "an attribute", :model, 1, TestModel do
+    it_should_behave_like "an attribute", :model, TestModel.new(), TestModel do
+      let(:assigned_value) { TestModel.new() }
 
       before do
-        allow_any_instance_of(TestModel).to receive(:find_by) { self }
+        allow_any_instance_of(TestModel).to receive(:valid?) { true }
+        allow(TestModel).to receive(:find_by)
       end
-
-      let(:assigned_value) { TestModel.new() }
 
       describe "additional" do
         before do
-          subject.attr_model :product, TestModel
+          subject.attr_model :product, TestModel, :required => true
         end
 
         it { should respond_to(:product_model)}
         it { subject.product_model.should eq(TestModel) }
+
+        it {
+          allow(TestModel).to receive(:find_by).with(:id => 1) { assigned_value }
+
+          instance = subject.new()
+          instance.product = 1
+          instance.product.should eq(assigned_value)
+        }
+
+        it {
+          allow(TestModel).to receive(:find_by).with(:id => 1) { assigned_value }
+          expect(assigned_value).to receive(:valid?) { true }
+
+          instance = subject.new()
+          instance.product = 1
+          instance.valid?
+        }
       end
     end
 

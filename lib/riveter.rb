@@ -22,7 +22,6 @@ module Riveter
   autoload :Query, 'riveter/query'
   autoload :QueryFilter, 'riveter/query_filter'
   autoload :Service, 'riveter/service'
-  autoload :Worker, 'riveter/worker'
 end
 
 # add autoload's for validators

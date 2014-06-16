@@ -19,7 +19,6 @@ module Riveter
           queries
           query_filters
           services
-          workers
         }.each do |path|
           config.autoload_paths += %W(#{config.root}/app/#{path})
           config.autoload_paths += %W(#{config.root}/app/#{path}/concerns)

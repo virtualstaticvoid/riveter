@@ -107,11 +107,20 @@ describe Riveter::CoreExtensions do
 
   describe Riveter::CoreExtensions::HashExtensions do
     describe "#rmerge" do
-      pending
+      it {
+        h1 = {"a" => 100, "b" => 200, "c" => {"c1" => 12, "c2" => 14}}
+        h2 = {"b" => 254, "c" => 300, "c" => {"c1" => 16, "c3" => 94}}
+        h1.rmerge(h2).should eq({"a" => 100, "b" => 254, "c" => {"c1" => 16, "c2" => 14, "c3" => 94}})
+      }
     end
 
     describe "#rmerge!" do
-      pending
+      it {
+        h1 = {"a" => 100, "b" => 200, "c" => {"c1" => 12, "c2" => 14}}
+        h2 = {"b" => 254, "c" => 300, "c" => {"c1" => 16, "c3" => 94}}
+        h1.rmerge!(h2)
+        h1.should eq({"a" => 100, "b" => 254, "c" => {"c1" => 16, "c2" => 14, "c3" => 94}})
+      }
     end
   end
 

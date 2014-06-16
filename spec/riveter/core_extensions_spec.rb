@@ -43,7 +43,16 @@ describe Riveter::CoreExtensions do
       it { should respond_to(:nil_sum) }
 
       it { subject.nil_sum.should eq(10) }
+      it { subject.nil_sum(20).should eq(30) }
+
       it { [1, 2, nil, 4].nil_sum.should eq(7) }
+      it { [1, 2, nil, 4].nil_sum(10).should eq(17) }
+
+      it {
+        block = Mock::Block.new()
+        expect(block).to receive(:call).exactly(4).times { 2 }
+        [1, 2, 3, 4].nil_sum(&block).should eq(8)
+      }
     end
 
     describe "#average" do

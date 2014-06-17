@@ -23,4 +23,20 @@ describe Riveter::EnquiryFormHelper do
       subject.enquiry_form_for(enquiry)
     end
   end
+
+  describe "#paginate_enquiry" do
+    it "delegates to paginate if available" do
+      enquiry = TestEnquiry.new()
+      allow(enquiry).to receive(:query) { :query }
+
+      expect(subject).to receive(:paginate).with(:query, {:a => :b})
+      subject.paginate_enquiry(enquiry, {:a => :b})
+    end
+
+    it "does nothing unless paginate method exists" do
+      enquiry = TestEnquiry.new()
+
+      subject.paginate_enquiry(enquiry).should be_nil
+    end
+  end
 end

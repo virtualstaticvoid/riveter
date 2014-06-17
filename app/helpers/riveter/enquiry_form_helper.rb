@@ -12,5 +12,9 @@ module Riveter
         simple_form_for(enquiry.query_filter, options, &block) :
         form_for(enquiry.query_filter, options, &block)
     end
+
+    def paginate_enquiry(enquiry, options={}, &block)
+      paginate(enquiry.query, options, &block) if respond_to?(:paginate)
+    end
   end
 end

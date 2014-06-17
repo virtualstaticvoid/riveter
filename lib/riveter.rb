@@ -40,6 +40,4 @@ require 'riveter/rails/railtie' if defined?(::Rails::Railtie)
 require 'riveter/rails/engine' if defined?(::Rails)
 
 # include locale in load path
-Dir[File.join(File.expand_path('../../config', __FILE__), 'locales', '*.yml')].each do |file|
-  I18n.load_path << file
-end
+I18n.load_path += Dir.glob(File.expand_path('../../config/locales/*.yml', __FILE__))

@@ -77,15 +77,6 @@ describe Riveter::Attributes do
     it_should_behave_like "an attribute", :boolean, true do
       let(:assigned_value) { '0' }
       let(:expected_value) { false }
-
-      describe "additional" do
-        before do
-          subject.attr_boolean :an_attribute
-        end
-        let(:instance) { subject.new() }
-
-        it { instance.should validate_booleaness_of(:an_attribute) }
-      end
     end
 
     it_should_behave_like "an attribute", :enum, TestEnum::Member1, TestEnum do

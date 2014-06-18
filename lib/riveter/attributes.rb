@@ -65,11 +65,6 @@ module Riveter
         attr_reader_with_converter name, converter
         alias_method "#{name}?", name
 
-        validates name,
-                  :allow_blank => !required,
-                  :allow_nil => !required,
-                  :booleaness => true if options[:validate]
-
         attr_writer name
 
         add_attr(name, :boolean, converter, options)

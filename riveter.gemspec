@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Chris Stefano']
   spec.email         = ['virtualstaticvoid@gmail.com']
   spec.summary       = %q{Provides several useful patterns, packaged in a gem, for use in Rails.}
-  spec.description   = %q{Provides several useful patterns, such as Enumerated, Command, Enquiry, Query, QueryFilter, Service, Presenter and Worker, packaged in a gem, for use in Rails and other Ruby applications.}
+  spec.description   = %q{Provides several useful patterns, such as Enumerated, Command, Enquiry, Query, QueryFilter, Service and Presenter, packaged in a gem, for use in Rails and other Ruby applications.}
   spec.homepage      = 'https://github.com/virtualstaticvoid/riveter'
   spec.license       = 'MIT'
 

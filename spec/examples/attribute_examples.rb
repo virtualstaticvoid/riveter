@@ -7,34 +7,36 @@ shared_examples_for "an attribute" do |type, default_value, *args, &block|
   let(:assigned_value) { default_value }
   let(:expected_value) { assigned_value }
 
-  describe type do
+  describe "of type '#{type}'" do
     let(:name) { "a_#{type}" }
     let(:instance) { subject.new() }
 
-    describe "as attribute" do
+    describe "with" do
       before do
-        subject.send :"attr_#{type}", name, *args, options
+        subject.send :"attr_#{type}", name, *args
       end
 
       it { subject.attributes.should include(name.to_s) }
       it { instance.attributes.should include(name.to_s) }
+
       it { instance.should respond_to(name)}
       it { instance.should respond_to("#{name}=")}
 
-      it "assigns attribute in initializer" do
+      it "assigned via initializer" do
         a = subject.new(name => assigned_value)
         a.send(name).should eq(expected_value)
         a.attributes[name].should eq(expected_value)
       end
 
-      it "assigns attribute" do
+      it "assigned via writer" do
         a = subject.new()
         a.send("#{name}=", assigned_value)
+        a.send(name).should eq(expected_value)
         a.attributes[name].should eq(expected_value)
       end
     end
 
-    describe "as required attribute" do
+    describe "required" do
       before do
         subject.send :"attr_#{type}", name, *args, options.merge(:required => true)
       end

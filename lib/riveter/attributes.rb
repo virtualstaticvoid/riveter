@@ -95,7 +95,7 @@ module Riveter
         validates name,
                   :allow_blank => !required,
                   :allow_nil => !required,
-                  :inclusion => { :in => enum.all } if options[:validate]
+                  :inclusion => { :in => enum.values } if options[:validate]
 
         attr_writer name
 

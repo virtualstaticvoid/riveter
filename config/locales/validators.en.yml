@@ -24,3 +24,8 @@ en:
     messages:
       booleaness: is not valid
       email: is not valid
+      invalid_date: is not a valid date
+      invalid_time: is not a valid time
+      date_range: is not a valid date range
+      date_range_date_from: "must be before %{date_to}"
+      date_range_date_to: "must be after %{date_from}"

@@ -12,8 +12,11 @@ module Riveter
   autoload :AttributeDefaultValues, 'riveter/attribute_default_values'
   autoload :AssociatedTypeRegistry, 'riveter/associated_type_registry'
   autoload :Attributes, 'riveter/attributes'
+  autoload :BooleanessValidator, 'riveter/booleaness_validator'
   autoload :Command, 'riveter/command'
   autoload :CommandController, 'riveter/command_controller'
+  autoload :DateRangeValidator, 'riveter/date_range_validator'
+  autoload :EmailValidator, 'riveter/email_validator'
   autoload :Enquiry, 'riveter/enquiry'
   autoload :EnquiryController, 'riveter/enquiry_controller'
   autoload :Enumerated, 'riveter/enumerated'
@@ -28,6 +31,7 @@ end
 module ActiveModel
   module Validations
     autoload :BooleanessValidator, 'riveter/booleaness_validator'
+    autoload :DateRangeValidator, 'riveter/date_range_validator'
     autoload :EmailValidator, 'riveter/email_validator'
   end
 end

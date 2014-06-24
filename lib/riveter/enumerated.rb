@@ -25,13 +25,8 @@ module Riveter
         const_names
       end
 
-      # returns an array of the constant names as symbols
-      define_singleton_method :values do
-        const_values
-      end
-
       # returns an array of constant values
-      define_singleton_method :all do
+      define_singleton_method :values do
         const_values
       end
 

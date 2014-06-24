@@ -13,8 +13,8 @@ describe Riveter::Enumerated do
     it { subject.names.should eq(%i{Member1 Member2}) }
   end
 
-  describe "#all" do
-    it { subject.all.should eq([1, 2]) }
+  describe "#values" do
+    it { subject.values.should eq([1, 2]) }
   end
 
   describe "#name_for" do

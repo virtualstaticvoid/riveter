@@ -89,7 +89,7 @@ describe Riveter::Attributes do
         end
         let(:instance) { subject.new() }
 
-        it { instance.should ensure_inclusion_of(:product_type).in_array(TestEnum.all) }
+        it { instance.should ensure_inclusion_of(:product_type).in_array(TestEnum.values) }
 
         it { should respond_to(:product_type_enum)}
         it { subject.product_type_enum.should eq(TestEnum) }

@@ -42,7 +42,7 @@ describe Riveter::Service do
 
       it "should invoke" do
         expect(subject).to receive(:perform) { true }
-        subject.perform(TestCommand.new()).should be_true
+        subject.perform(TestCommand.new()).should be_truthy
       end
     end
   end

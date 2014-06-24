@@ -149,10 +149,10 @@ describe Riveter::AssociatedTypeRegistry do
     describe "registered types" do
       let(:key) { first_class.key_for(TestAssociatedClass) }
 
-      it { first_class.registry.key?(key).should be_true }
-      it { second_class.registry.key?(key).should be_true }
-      it { derived_first_class.registry.key?(key).should be_true }
-      it { derived_second_class.registry.key?(key).should be_true }
+      it { first_class.registry.key?(key).should be_truthy }
+      it { second_class.registry.key?(key).should be_truthy }
+      it { derived_first_class.registry.key?(key).should be_truthy }
+      it { derived_second_class.registry.key?(key).should be_truthy }
     end
   end
 end

@@ -75,24 +75,24 @@ describe Riveter::Attributes do
 
         it {
           instance.an_attribute = nil
-          instance.an_attribute_from?.should be_false
+          instance.an_attribute_from?.should be_falsey
         }
 
         it {
           instance.an_attribute_from = Date.today
-          instance.an_attribute_from?.should be_true
+          instance.an_attribute_from?.should be_truthy
         }
 
         it { instance.should respond_to(:an_attribute_to?) }
 
         it {
           instance.an_attribute = nil
-          instance.an_attribute_to?.should be_false
+          instance.an_attribute_to?.should be_falsey
         }
 
         it {
           instance.an_attribute_to = Date.today
-          instance.an_attribute_to?.should be_true
+          instance.an_attribute_to?.should be_truthy
         }
       end
     end
@@ -233,7 +233,7 @@ describe Riveter::Attributes do
     end
 
     describe "#persisted?" do
-      it { subject.persisted?.should be_false }
+      it { subject.persisted?.should be_falsey }
     end
 
     describe "#column_for_attribute" do

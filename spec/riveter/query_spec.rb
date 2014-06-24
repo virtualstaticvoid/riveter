@@ -58,13 +58,13 @@ describe Riveter::Query do
     it "should yield true when data available" do
       allow_any_instance_of(TestQuery).to receive(:relation) { [1] }
       query = TestQuery.new(nil)
-      query.has_data?.should be_true
+      query.has_data?.should be_truthy
     end
 
     it "should yield false when no data available" do
       allow_any_instance_of(TestQuery).to receive(:relation) { [] }
       query = TestQuery.new(nil)
-      query.has_data?.should be_false
+      query.has_data?.should be_falsey
     end
   end
 

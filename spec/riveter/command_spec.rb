@@ -27,25 +27,25 @@ describe Riveter::Command do
 
     describe "#can_perform?" do
       it "should yield false when invalid" do
-        subject.can_perform?.should be_false
+        subject.can_perform?.should be_falsey
       end
 
       it "should yield true when valid" do
         subject.name = 'test'
-        subject.can_perform?.should be_true
+        subject.can_perform?.should be_truthy
       end
     end
 
     describe "#submit" do
       it "should yield false when invalid" do
-        subject.submit().should be_false
+        subject.submit().should be_falsey
       end
 
       it "should yield true when valid" do
         allow(subject).to receive(:perform) { true }
 
         subject.name = 'test'
-        subject.submit().should be_true
+        subject.submit().should be_truthy
       end
 
       it "should assign attributes" do

@@ -13,7 +13,7 @@ describe <%= class_name %>Query do
     subject { <%= class_name %>Query.new(filter) }
 
     it { subject.relation.should_not be_nil }
-    it { subject.has_data?.should be_true }
+    it { subject.has_data?.should be_truthy }
     it {
       block = Mock::Block.new
       expect(block).to receive(:call).at_least(:once)
@@ -27,7 +27,7 @@ describe <%= class_name %>Query do
     subject { <%= class_name %>Query.new(filter) }
 
     it { subject.relation.should_not be_nil }
-    it { subject.has_data?.should be_false }
+    it { subject.has_data?.should be_falsey }
     it {
       block = Mock::Block.new
       expect(block).to_not receive(:call)

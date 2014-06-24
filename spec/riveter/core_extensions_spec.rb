@@ -6,16 +6,16 @@ describe Riveter::CoreExtensions do
     it { Object.should respond_to(:boolean?) }
     it { Object.should respond_to(:to_b) }
 
-    it { true.boolean?.should be_true }
-    it { false.boolean?.should be_true }
-    it { Object.new().boolean?.should be_false }
+    it { true.boolean?.should be_truthy }
+    it { false.boolean?.should be_truthy }
+    it { Object.new().boolean?.should be_falsey }
 
     [true, 1, 'yes', 'on', 'y', '1'].each do |value|
-      it { value.to_b.should be_true }
+      it { value.to_b.should be_truthy }
     end
 
     [false, 0, 'no', 'off', 'n', '0'].each do |value|
-      it { value.to_b.should be_false }
+      it { value.to_b.should be_falsey }
     end
   end
 

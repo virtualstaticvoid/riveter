@@ -21,25 +21,25 @@ describe <%= class_name %>Enquiry do
 
   describe "#submit" do
     it "succeeds with valid attributes" do
-      subject.submit(valid_query_filter_attributes).should be_true
+      subject.submit(valid_query_filter_attributes).should be_truthy
     end
 
     it "fails with invalid attributes" do
       allow(subject).to receive(:create_query_filter) { Mock::InvalidQueryFilter.new() }
-      subject.submit().should be_false
+      subject.submit().should be_falsey
     end
   end
 
   describe "#has_data?" do
     it "succeeds with valid attributes" do
       subject.submit(valid_query_filter_attributes)
-      subject.has_data?.should be_true
+      subject.has_data?.should be_truthy
     end
 
     it "fails with invalid attributes" do
       allow(subject).to receive(:create_query_filter) { Mock::InvalidQueryFilter.new() }
       subject.submit()
-      subject.has_data?.should be_false
+      subject.has_data?.should be_falsey
     end
   end
 

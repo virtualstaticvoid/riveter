@@ -3,11 +3,11 @@ RSpec::Matchers.define :validate_timeliness_of do |attribute|
     ValidatorDetector.detect(model, attribute, ActiveModel::Validations::TimelinessValidator)
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expect #{attribute} to validate timeliness of"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expect #{attribute} to not validate timeliness of"
   end
 

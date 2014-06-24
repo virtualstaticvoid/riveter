@@ -247,17 +247,17 @@ describe Riveter::Enquiry do
       describe "#has_data?" do
         it "yields false when query nil" do
           allow(subject).to receive(:query) { nil }
-          subject.has_data?.should be_false
+          subject.has_data?.should be_falsey
         end
 
         it "yields false when query empty" do
           allow(subject).to receive(:query) { double(:query, :has_data? => false) }
-          subject.has_data?.should be_false
+          subject.has_data?.should be_falsey
         end
 
         it "yields true when query data" do
           allow(subject).to receive(:query) { double(:query, :has_data? => true) }
-          subject.has_data?.should be_true
+          subject.has_data?.should be_truthy
         end
       end
 

@@ -9,6 +9,7 @@ class TestClassWithAttributes
   attr_integer :integer, :default => 1
   attr_decimal :decimal, :default => 9.998
   attr_date :date, :default => Date.new(2010, 1, 12)
+  attr_date_range :date_range, :default => Date.new(2010, 1, 12)..Date.new(2011, 1, 12)
   attr_time :time, :default => Time.new(2010, 1, 12, 14, 56)
   attr_boolean :boolean, :default => true
   attr_enum :enum, TestEnum, :default => TestEnum::Member1

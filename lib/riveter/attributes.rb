@@ -54,6 +54,62 @@ module Riveter
 
       alias :attr_datetime :attr_time
 
+      def attr_date_range(name, options={}, &block)
+        options = {
+          :validate => true
+        }.merge(options)
+
+        required = (true == options.delete(:required))
+
+        # expecting the default value to be a date range
+        # so extract out the first and last parts for the from and to
+        # otherwise, it may just be a date or nil
+        default = options.delete(:default)
+        default = default.is_a?(Range) ? default : (default..default)
+        defaults = {
+          :from => default.first,
+          :to => default.last
+        }
+
+        converter = block_given? ? block : Converters.converter_for(:date)
+
+        # return from and to as range
+        define_method name do
+          # can't have range starting or ending with nil, so return nil
+          send(:"#{name}_from")..send(:"#{name}_to") rescue nil
+        end
+
+        define_method "#{name}=" do |value|
+          value ||= nil..nil
+          range = value.is_a?(Range) ? value : value..value
+          send(:"#{name}_from=", range.first)
+          send(:"#{name}_to=", range.last)
+        end
+
+        validates name,
+                  :allow_nil => !required,
+                  :date_range => true if options[:validate]
+
+        add_attr(name, :date_range)
+
+        # break down into parts
+        [:from, :to].each do |part|
+          attr_reader_with_converter :"#{name}_#{part}", converter
+
+          define_method :"#{name}_#{part}?" do
+            send(:"#{name}_#{part}").present?
+          end
+
+          attr_writer :"#{name}_#{part}"
+
+          validates :"#{name}_#{part}",
+                    :allow_nil => !required,
+                    :timeliness => { :type => :date } if options[:validate]
+
+          add_attr(:"#{name}_#{part}", :date, converter, options.merge(:default => defaults[part]))
+        end
+      end
+
       def attr_boolean(name, options={}, &block)
         options = {
           :validate => true
@@ -239,7 +295,7 @@ module Riveter
         add_attr(name, type, converter, options)
       end
 
-      def add_attr(name, type, converter, options={})
+      def add_attr(name, type, converter=nil, options={})
         self._attributes[name] = attribute_info = AttributeInfo.new(name, type, converter, options)
         validates name, :presence => true if attribute_info.required?
         attribute_info

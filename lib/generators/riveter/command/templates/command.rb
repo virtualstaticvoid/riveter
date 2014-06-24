@@ -25,6 +25,7 @@ class <%= class_name %>Command < Riveter::Command::Base
   #   attr_integer
   #   attr_decimal
   #   attr_date
+  #   attr_date_range
   #   attr_time
   #   attr_boolean
   #   attr_enum

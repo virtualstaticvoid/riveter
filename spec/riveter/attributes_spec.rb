@@ -60,6 +60,43 @@ describe Riveter::Attributes do
       end
     end
 
+    it_should_behave_like "an attribute", :date_range, Date.new(2010, 1, 12)..Date.new(2012, 1, 11) do
+      describe "additional" do
+        before do
+          subject.attr_date_range :an_attribute
+        end
+        let(:instance) { subject.new() }
+
+        it { instance.should validate_date_range_of(:an_attribute) }
+        it { instance.should validate_timeliness_of(:an_attribute_from) }
+        it { instance.should validate_timeliness_of(:an_attribute_to) }
+
+        it { instance.should respond_to(:an_attribute_from?) }
+
+        it {
+          instance.an_attribute = nil
+          instance.an_attribute_from?.should be_false
+        }
+
+        it {
+          instance.an_attribute_from = Date.today
+          instance.an_attribute_from?.should be_true
+        }
+
+        it { instance.should respond_to(:an_attribute_to?) }
+
+        it {
+          instance.an_attribute = nil
+          instance.an_attribute_to?.should be_false
+        }
+
+        it {
+          instance.an_attribute_to = Date.today
+          instance.an_attribute_to?.should be_true
+        }
+      end
+    end
+
     it_should_behave_like "an attribute", :time, Time.new(2010, 1, 12, 8, 4, 45) do
       let(:assigned_value) { '2010-01-12 08:04:12' }
       let(:expected_value) { Time.new(2010, 1, 12, 8, 4, 12) }
@@ -158,6 +195,9 @@ describe Riveter::Attributes do
         subject.integer.should eq(1)
         subject.decimal.should eq(9.998)
         subject.date.should eq(Date.new(2010, 1, 12))
+        subject.date_range.should eq(Date.new(2010, 1, 12)..Date.new(2011, 1, 12))
+        subject.date_range_from.should eq(Date.new(2010, 1, 12))
+        subject.date_range_to.should eq(Date.new(2011, 1, 12))
         subject.time.should eq(Time.new(2010, 1, 12, 14, 56))
         subject.boolean.should eq(true)
         subject.enum.should eq(TestEnum::Member1)
@@ -178,6 +218,9 @@ describe Riveter::Attributes do
           'integer' => 1,
           'decimal' => 9.998,
           'date' => Date.new(2010, 1, 12),
+          'date_range' => Date.new(2010, 1, 12)..Date.new(2011, 1, 12),
+          'date_range_from' => Date.new(2010, 1, 12),
+          'date_range_to' => Date.new(2011, 1, 12),
           'time' => Time.new(2010, 1, 12, 14, 56),
           'boolean' => true,
           'enum' => TestEnum::Member1,

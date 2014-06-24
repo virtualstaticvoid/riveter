@@ -28,7 +28,6 @@ require 'rails/all'
 require 'rails/generators'
 require 'haml'
 
-require 'rspec/autorun'
 require 'shoulda/matchers'
 require 'ammeter/init'
 
@@ -39,6 +38,15 @@ Dir[File.expand_path("../support/**/*.rb", __FILE__)].each {|f| require f }
 
 # configure Rspec
 RSpec.configure do |config|
+
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
+  config.mock_with :rspec do |c|
+    c.syntax = :expect
+  end
+
   # config.order = :random
   config.fail_fast = (ENV["FAIL_FAST"] == 1)
 end

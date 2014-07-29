@@ -38,7 +38,7 @@ module Riveter
       return false unless self.can_perform?
 
       # all good, perform the action
-      self.perform *args
+      self.perform(*args)
     end
 
   protected

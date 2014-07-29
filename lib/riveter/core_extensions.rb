@@ -91,7 +91,7 @@ module Riveter
 
       # make compatible with an ActiveRelation
       def find_each_with_order(&block)
-        self.each &block if block_given?
+        self.each(&block) if block_given?
       end
 
       alias_method :find_each, :find_each_with_order

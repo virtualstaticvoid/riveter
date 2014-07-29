@@ -5,30 +5,30 @@
 
   %h2 Search
 
-    = enquiry_form_for(@enquiry, :html => {:class => 'form-horizontal'}) do |f|
+  = enquiry_form_for(@enquiry, :html => {:class => 'form-horizontal'}) do |f|
 <% if defined?(SimpleForm) -%>
-      = f.error_notification
+    = f.error_notification
 <% else -%>
-      - if f.object.errors.any?
-        #error_explanation
-          %h2= "#{pluralize(f.object.errors.count, "error")} prohibited performing this enquiry:"
-          %ul
-            - f.object.errors.full_messages.each do |msg|
-              %li= msg
+    - if f.object.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(f.object.errors.count, "error")} prohibited performing this enquiry:"
+        %ul
+          - f.object.errors.full_messages.each do |msg|
+            %li= msg
 <%end -%>
 
-      .form-inputs
+    .form-inputs
 <% if filter_attributes.any? -%>
 <% filter_attributes.each do |attribute| -%>
-        = f.input :<%= attribute.name %><%= attribute.inject_options %>
+      = f.input :<%= attribute.name %><%= attribute.inject_options %>
 <% end -%>
 <% else -%>
-        -# TODO: provide inputs for each attribute
+      -# TODO: provide inputs for each attribute
 <% end -%>
 
-      .form-actions
-        = f.submit
-        = f.reset
+    .form-actions
+      = f.submit
+      = f.reset
 
 .results
 

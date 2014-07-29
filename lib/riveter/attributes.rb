@@ -115,7 +115,6 @@ module Riveter
           :validate => true
         }.merge(options)
 
-        required = options[:required] == true
         converter = block_given? ? block : Converters.converter_for(:boolean)
 
         attr_reader_with_converter name, converter

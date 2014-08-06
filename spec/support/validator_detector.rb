@@ -30,13 +30,17 @@ module ValidatorDetector
       if method.instance_of?(Symbol) || method.instance_of?(String)
         # it's a model method, so evalulate within context
         self.new().instance_eval do
-          send(method, self) rescue false
+          # call the method assocated with the validation
+          # if a method is called in an unless, we need to flip the boolean result
+          ( validator.options[:unless].present? ? !send(method) : send(method) ) rescue false
         end
 
       elsif method.instance_of?(Proc)
         # it's a lambda, so invoke within context
         self.new().instance_eval do
-          method.call(self) rescue false
+          # call the proc assocated with the validation
+          # if a method is called in an unless, we need to flip the boolean result
+          ( validator.options[:unless].present? ? !method.call(self) : method.call(self) ) rescue false
         end
 
       else

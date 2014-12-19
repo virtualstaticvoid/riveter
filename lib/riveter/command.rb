@@ -19,6 +19,10 @@ module Riveter
             :default => "Successfully executed #{command_name.human}."
           )
         end
+
+        def submit(*args)
+          new().submit(*args)
+        end
       end
 
       alias_method :can_perform?, :valid?

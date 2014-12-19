@@ -20,6 +20,20 @@ describe Riveter::Command do
       it { should respond_to(:success_notice) }
       it { subject.success_notice.should eq('Successfully executed Test command.') }
     end
+
+    describe ".submit" do
+      it { should respond_to(:submit) }
+
+      it "should yield false when invalid" do
+        allow_any_instance_of(TestCommand).to receive(:submit) { false }
+        subject.submit().should eq(false)
+      end
+
+      it "should yield true when valid" do
+        allow_any_instance_of(TestCommand).to receive(:submit) { true }
+        subject.submit().should eq(true)
+      end
+    end
   end
 
   describe "instance" do

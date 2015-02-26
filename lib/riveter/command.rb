@@ -20,6 +20,14 @@ module Riveter
           )
         end
 
+        def failure_notice
+          I18n.translate(
+            :failure,
+            :scope => [i18n_scope, :notices, command_name.i18n_key],
+            :default => "Failed to execute #{command_name.human}."
+          )
+        end
+
         def submit(*args)
           new().submit(*args)
         end

@@ -195,6 +195,9 @@ module Riveter
         add_attr(name, :hash, converter, options)
       end
 
+      ##
+      # FIXME: this doesn't work as expected
+      #
       def attr_model(name, model_or_scope, options={}, &block)
         options = {
           :model => model_or_scope,

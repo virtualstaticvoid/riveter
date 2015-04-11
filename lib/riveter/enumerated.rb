@@ -64,7 +64,7 @@ module Riveter
 
       # for use within form select inputs
       define_singleton_method :collection do
-        self.const_get(:All).collect {|m| [m.human, m.name] }
+        self.const_get(:All).collect {|m| [m.human, m.value] }
       end
     end
 

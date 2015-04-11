@@ -43,7 +43,7 @@ module Riveter
 
       # returns the human name for the given constant name or value
       # it uses the locale to lookup the translation
-      # and defaults to the capitalized name of the constant
+      # and defaults to the underscore name of the constant
       define_singleton_method :human_name_for do |name_or_value, options={}|
         const_name = name_or_value.is_a?(Symbol) ?
                       name_or_value :
@@ -54,7 +54,7 @@ module Riveter
           :default => const_name.to_s.titleize
         }.merge!(options)
 
-        I18n.translate(const_name, options)
+        I18n.translate(const_name.to_s.underscore, options)
       end
 
       # defines the "All" constant

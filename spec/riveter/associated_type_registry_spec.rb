@@ -91,7 +91,7 @@ describe Riveter::AssociatedTypeRegistry do
     it "should include the unknown type in the error" do
       begin
         subject.resolve!(Class)
-      rescue Exception => e
+      rescue => e
         e.type.should eq(Class)
       end
     end

@@ -94,13 +94,13 @@ describe Riveter::CoreExtensions do
       it "should invoke block" do
         block = Mock::Block.new()
         expect(block).to receive(:call).exactly(4).times
-        subject.find_each_with_order &block
+        subject.find_each_with_order(&block)
       end
 
       it "should not invoke block" do
         block = Mock::Block.new()
         expect(block).to_not receive(:call)
-        [].find_each_with_order &block
+        [].find_each_with_order(&block)
       end
     end
   end

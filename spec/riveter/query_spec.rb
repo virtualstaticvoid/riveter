@@ -44,13 +44,13 @@ describe Riveter::Query do
       expect(block).to receive(:call).at_least(:once)
 
       fake_relation = [1]
-      allow(fake_relation).to receive(:find_each_with_order) do |*args, &block|
-        block.call(*args)
+      allow(fake_relation).to receive(:find_each_with_order) do |*args, &blck|
+        blck.call(*args)
       end
       allow_any_instance_of(TestQuery).to receive(:relation) { fake_relation }
 
       query = TestQuery.new(nil)
-      query.find_each &block
+      query.find_each(&block)
     end
   end
 

@@ -54,7 +54,7 @@ describe <%= class_name %>Enquiry do
       expect(block).to receive(:call).any_number_of_times
 
       subject.submit(valid_query_filter_attributes)
-      subject.query_results.each &block
+      subject.query_results.each(&block)
     end
 
     it "fails with invalid attributes" do

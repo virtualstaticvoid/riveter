@@ -17,7 +17,7 @@ describe <%= class_name %>Query do
     it {
       block = Mock::Block.new
       expect(block).to receive(:call).at_least(:once)
-      subject.find_each &block
+      subject.find_each(&block)
     }
 
   end
@@ -31,7 +31,7 @@ describe <%= class_name %>Query do
     it {
       block = Mock::Block.new
       expect(block).to_not receive(:call)
-      subject.find_each &block
+      subject.find_each(&block)
     }
 
   end

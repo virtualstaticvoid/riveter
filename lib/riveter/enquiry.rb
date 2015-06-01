@@ -26,7 +26,7 @@ module Riveter
           # define an anomymous class derived from QueryFilter
           # which invokes the block given in the classes context
           query_filter_klass = Class.new(QueryFilter::Base)
-          query_filter_klass.class_eval &block
+          query_filter_klass.class_eval(&block)
 
           # for anonymous classes, need to override the
           # model_name method so that forms etc can work

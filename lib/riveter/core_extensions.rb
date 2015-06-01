@@ -234,13 +234,18 @@ class Hash
   include Riveter::CoreExtensions::HashExtensions
 end
 
-class ActiveRecord::Relation
-  include Riveter::CoreExtensions::ChainedQuerySupport
-  include Riveter::CoreExtensions::BatchFinderSupport
-end
+# mixin if active record is available
+if defined?(ActiveRecord)
 
-module ActiveRecord
-  module Querying
-    delegate :find_each_with_order, :find_in_batches_with_order, :to => :scoped
+  class ActiveRecord::Relation
+    include Riveter::CoreExtensions::ChainedQuerySupport
+    include Riveter::CoreExtensions::BatchFinderSupport
   end
+
+  module ActiveRecord
+    module Querying
+      delegate :find_each_with_order, :find_in_batches_with_order, :to => :scoped
+    end
+  end
+
 end

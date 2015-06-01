@@ -15,6 +15,7 @@ SimpleCov.start do
 end
 
 require 'pry'
+require 'active_record'
 
 require 'riveter'
 require 'riveter/spec_helper'

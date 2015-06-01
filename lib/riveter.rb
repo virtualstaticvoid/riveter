@@ -1,7 +1,6 @@
 require "riveter/version"
 
 require 'active_model'
-require 'active_record'
 require 'active_support'
 require 'validates_timeliness'
 

@@ -188,7 +188,7 @@ PLATFORMS
 
 DEPENDENCIES
   ammeter (~> 1.1.2)
-  bundler (~> 1.10.1)
+  bundler (~> 1.11.2)
   coveralls (~> 0.8.1)
   haml-rails (~> 0.9.0)
   pry (~> 0.10.1)
@@ -200,4 +200,4 @@ DEPENDENCIES
   shoulda-matchers (~> 2.8.0)
 
 BUNDLED WITH
-   1.10.1
+   1.11.2

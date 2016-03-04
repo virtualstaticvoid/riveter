@@ -402,6 +402,10 @@ module Riveter
       false
     end
 
+    def has_attribute?(column)
+      self.class._attributes.key?(column)
+    end
+
     # forms use this for getting column meta data
     def column_for_attribute(column)
       attribute_info = self.class._attributes[column]

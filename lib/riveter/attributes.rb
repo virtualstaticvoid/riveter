@@ -65,11 +65,22 @@ module Riveter
         # so extract out the first and last parts for the from and to
         # otherwise, it may just be a date or nil
         default = options.delete(:default)
+        default = default.respond_to?(:call) ? default.call : default
         default = default.is_a?(Range) ? default : (default..default)
         defaults = {
           :from => default.first,
           :to => default.last
         }
+
+        [:min, :max].each do |limit|
+
+          limit_value = options.delete(limit)
+          limit_value = limit_value.respond_to?(:call) ? limit_value.call : limit_value
+
+          define_method :"#{name}_#{limit}" do
+            limit_value
+          end
+        end
 
         converter = block_given? ? block : Converters.converter_for(:date)
 
@@ -79,18 +90,31 @@ module Riveter
           send(:"#{name}_from")..send(:"#{name}_to") rescue nil
         end
 
-        define_method "#{name}=" do |value|
+        define_method :"#{name}=" do |value|
           value ||= nil..nil
           range = value.is_a?(Range) ? value : value..value
           send(:"#{name}_from=", range.first)
           send(:"#{name}_to=", range.last)
         end
 
-        validates name,
-                  :allow_nil => !required,
-                  :date_range => true if options[:validate]
-
         add_attr(name, :date_range)
+
+        if options[:validate]
+
+          validate :"#{name}_validation"
+
+          define_method :"#{name}_validation" do
+            date_from = send(:"#{name}_from")
+            date_to = send(:"#{name}_to")
+
+            errors.add(name, :blank) if
+              required && (date_from.blank? || date_to.blank?)
+
+            errors.add(name, :invalid) if
+              !(date_from.blank? || date_to.blank?) && (date_from > date_to || date_to < date_from)
+          end
+
+        end
 
         # break down into parts
         [:from, :to].each do |part|
@@ -108,6 +132,30 @@ module Riveter
 
           add_attr(:"#{name}_#{part}", :date, converter, options.merge(:default => defaults[part]))
         end
+
+        # helper for determining if both from and to dates have been provided
+        define_method :"#{name}_present?" do
+          date_from = send(:"#{name}_from")
+          date_to = send(:"#{name}_to")
+          date_from && date_to
+        end
+
+        # return from and to as range in UTC
+        define_method :"#{name}_utc" do
+          date_from = send(:"#{name}_from")
+          date_to = send(:"#{name}_to")
+          if date_from && date_to
+            if date_from == date_to
+              date = date_from.to_utc_date
+              DateTime.new(date.year, date.month, date.day, 0, 0, 0)..DateTime.new(date.year, date.month, date.day, 23, 59, 59)
+            else
+              date_from.to_utc_date..date_to.to_utc_date
+            end
+          else
+            nil
+          end
+        end
+
       end
 
       def attr_boolean(name, options={}, &block)

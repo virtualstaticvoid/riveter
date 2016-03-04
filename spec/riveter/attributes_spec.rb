@@ -67,7 +67,6 @@ describe Riveter::Attributes do
         end
         let(:instance) { subject.new() }
 
-        it { instance.should validate_date_range_of(:an_attribute) }
         it { instance.should validate_timeliness_of(:an_attribute_from) }
         it { instance.should validate_timeliness_of(:an_attribute_to) }
 

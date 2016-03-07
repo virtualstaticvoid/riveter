@@ -359,6 +359,7 @@ module Riveter
 
       def default
         @default ||= options[:default]
+        @default.respond_to?(:call) ? @default.call : @default
       end
 
       def default?

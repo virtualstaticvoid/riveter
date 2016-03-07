@@ -61,24 +61,11 @@ module Riveter
 
         required = (true == options.delete(:required))
 
-        # expecting the default value to be a date range
-        # so extract out the first and last parts for the from and to
-        # otherwise, it may just be a date or nil
-        default = options.delete(:default)
-        default = default.respond_to?(:call) ? default.call : default
-        default = default.is_a?(Range) ? default : (default..default)
-        defaults = {
-          :from => default.first,
-          :to => default.last
-        }
-
         [:min, :max].each do |limit|
-
           limit_value = options.delete(limit)
-          limit_value = limit_value.respond_to?(:call) ? limit_value.call : limit_value
 
           define_method :"#{name}_#{limit}" do
-            limit_value
+            limit_value.respond_to?(:call) ? limit_value.call : limit_value
           end
         end
 
@@ -97,7 +84,7 @@ module Riveter
           send(:"#{name}_to=", range.last)
         end
 
-        add_attr(name, :date_range)
+        add_attr(name, :date_range, converter, options)
 
         if options[:validate]
 
@@ -130,7 +117,7 @@ module Riveter
                     :allow_nil => !required,
                     :timeliness => { :type => :date } if options[:validate]
 
-          add_attr(:"#{name}_#{part}", :date, converter, options.merge(:default => defaults[part]))
+          add_attr(:"#{name}_#{part}", :date, converter)
         end
 
         # helper for determining if both from and to dates have been provided

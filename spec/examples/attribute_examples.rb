@@ -13,7 +13,7 @@ shared_examples_for "an attribute" do |type, default_value, *args, &block|
 
     describe "with" do
       before do
-        subject.send :"attr_#{type}", name, *args
+        subject.send :"attr_#{type}", name, *args, options
       end
 
       it { subject.attributes.should include(name.to_s) }
@@ -60,7 +60,7 @@ shared_examples_for "an attribute" do |type, default_value, *args, &block|
       end
 
       it {
-        expect(mock_block).to receive(:call).at_least(:once)
+        expect(mock_block).to receive(:call).at_least(:once).with(anything, instance_of(Hash))
         instance.send(name)
       }
     end

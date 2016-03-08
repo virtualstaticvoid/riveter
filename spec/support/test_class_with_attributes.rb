@@ -15,7 +15,6 @@ class TestClassWithAttributes
   attr_enum :enum, TestEnum, :default => TestEnum::Member1
   attr_array :array, :default => [1, 2, 3]
   attr_hash :hash, :default => {:a => :b}
-  attr_model :model, TestModel, :default => TestModel
   attr_object :object, :default => 'whatever'
 
 end

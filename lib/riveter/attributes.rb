@@ -26,9 +26,13 @@ module Riveter
 
     module ClassMethods
       def attr_string(name, options={}, &block)
+        options = {
+          :validate => true
+        }.merge(options)
+
         converter = block_given? ? block : Converters.converter_for(:string)
 
-        attr_reader_with_converter name, converter
+        attr_reader_with_converter name, converter, options
         attr_writer name
 
         add_attr(name, :string, converter, options)
@@ -105,7 +109,7 @@ module Riveter
 
         # break down into parts
         [:from, :to].each do |part|
-          attr_reader_with_converter :"#{name}_#{part}", converter
+          attr_reader_with_converter :"#{name}_#{part}", converter, options
 
           define_method :"#{name}_#{part}?" do
             send(:"#{name}_#{part}").present?
@@ -152,7 +156,7 @@ module Riveter
 
         converter = block_given? ? block : Converters.converter_for(:boolean)
 
-        attr_reader_with_converter name, converter
+        attr_reader_with_converter name, converter, options
         alias_method "#{name}?", name
 
         attr_writer name
@@ -160,7 +164,10 @@ module Riveter
         add_attr(name, :boolean, converter, options)
       end
 
+      # NB: enum must respond to values
       def attr_enum(name, enum, options={}, &block)
+        raise ArgumentError, 'enum' unless enum && enum.respond_to?(:values)
+
         options = {
           :enum => enum,
           :validate => true
@@ -169,18 +176,7 @@ module Riveter
         required = options[:required] == true
         converter = block_given? ? block : Converters.converter_for(:enum, options)
 
-        attr_reader_with_converter name, converter
-
-        # helpers
-        # TODO: would be nicer to emulate an association
-
-        define_singleton_method "#{name}_enum" do
-          enum
-        end
-
-        define_singleton_method name.to_s.pluralize do
-          enum.collection
-        end
+        attr_reader_with_converter name, converter, options
 
         validates name,
                   :allow_blank => !required,
@@ -203,7 +199,7 @@ module Riveter
 
         define_method name do
           array = instance_variable_get("@#{name}") || []
-          array.map {|v| converter.call(v) }
+          array.map {|v| converter.call(v, options) }
         end
 
         attr_writer name
@@ -222,7 +218,7 @@ module Riveter
 
         define_method name do
           hash = instance_variable_get("@#{name}") || {}
-          hash.merge(hash) {|k, v| converter.call(v) }
+          hash.merge(hash) {|k, v| converter.call(v, options) }
         end
 
         attr_writer name
@@ -230,65 +226,46 @@ module Riveter
         add_attr(name, :hash, converter, options)
       end
 
-      ##
-      # FIXME: this doesn't work as expected
-      #
-      def attr_model(name, model_or_scope, options={}, &block)
+      def attr_object(name, options={}, &block)
         options = {
-          :model => model_or_scope,
-          :validate => true,
-          :find_by => :id
+          :validate => true
         }.merge(options)
 
-        required = options[:required] == true
-        converter = if block_given?
-                      block
-                    elsif model_or_scope.respond_to?(:find_by)
-                      Converters.converter_for(:model, options)
-                    else
-                      Converters.converter_for(:object, options)
-                    end
-
-        # helpers
-        define_singleton_method "#{name}_model" do
-          model_or_scope
-        end
-
-        attr_reader_with_converter name, converter
-
-        # only add validation of the model instance if supported
-        if model_or_scope.instance_methods.include?(:valid?) && options[:validate]
-          validate :"validate_#{name}"
-
-          # need a "custom" associated validation since
-          # we don't reference active record...
-          define_method :"validate_#{name}" do
-            instance = self.send(name)
-            return unless required && instance.present?
-            self.errors.add(name, :invalid) unless instance.valid?
-          end
-        end
-
-        attr_writer name
-
-        add_attr(name, :model, converter, options)
-      end
-
-      def attr_object(name, options={}, &block)
         converter = block_given? ? block : Converters.converter_for(:object, options)
 
-        attr_reader_with_converter name, converter
+        attr_reader_with_converter name, converter, options
 
         attr_writer name
 
         add_attr(name, :object, converter, options)
       end
 
+      def attr_class(name, classes, options={}, &block)
+        options = {
+          :validate => true,
+          :classes => classes
+        }.merge(options)
+
+        required = options[:required] == true
+        converter = block_given? ? block : Converters.converter_for(:class, options)
+
+        attr_reader_with_converter name, converter, options
+
+        validates name,
+                  :allow_blank => !required,
+                  :allow_nil => !required,
+                  :inclusion => { :in => classes } if options[:validate]
+
+        attr_writer name
+
+        add_attr(name, :class, converter, options)
+      end
+
     private
 
-      def attr_reader_with_converter(name, converter)
+      def attr_reader_with_converter(name, converter, options={})
         define_method name do
-          converter.call instance_variable_get("@#{name}")
+          converter.call(instance_variable_get("@#{name}"), options)
         end
       end
 
@@ -300,7 +277,7 @@ module Riveter
         required = options[:required] == true
         converter = block_given? ? block : Converters.converter_for(type)
 
-        attr_reader_with_converter name, converter
+        attr_reader_with_converter name, converter, options
 
         validates name,
                   :allow_blank => !required,
@@ -320,7 +297,7 @@ module Riveter
         required = options[:required] == true
         converter = block_given? ? block : Converters.converter_for(type)
 
-        attr_reader_with_converter name, converter
+        attr_reader_with_converter name, converter, options
 
         validates name,
                   :allow_blank => !required,
@@ -461,35 +438,35 @@ module Riveter
       def self.converter_for(data_type, options={})
         case data_type
         when :string
-          lambda {|v| v.to_s }
+          lambda {|v, opt| v.to_s }
 
         when :boolean
-          lambda {|v| v.to_b }
+          lambda {|v, opt| v.to_b }
 
         when :integer
-          lambda {|v| Integer(v) rescue v }
+          lambda {|v, opt| Integer(v) rescue v }
 
         when :decimal, :float
-          lambda {|v| Float(v) rescue v }
+          lambda {|v, opt| Float(v) rescue v }
 
         when :date
-          lambda {|v| Date.parse(v) rescue v }
+          lambda {|v, opt| Date.parse(v) rescue v }
 
         when :time
-          lambda {|v| Time.parse(v) rescue v }
+          lambda {|v, opt| Time.parse(v) rescue v }
 
         when :enum
-          lambda {|enum, v|
+          lambda {|enum, v, opt|
             enum.values.include?(v) ? v : enum.value_for(v)
           }.curry[options[:enum]]
 
-        when :model
-          lambda {|model, attrib, v|
-            v.is_a?(model) ? v : model.find_by(attrib => v)
-          }.curry[options[:model], options[:find_by]]
+        when :class
+          lambda {|models, v, opt|
+            models[v] || v
+          }.curry[options[:classes].inject({}) {|list, klass| list[klass.name] = klass; list }]
 
         else # object etc...
-          lambda {|v| v }
+          lambda {|v, opt| v }
         end
       end
 

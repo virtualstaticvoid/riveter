@@ -126,11 +126,6 @@ describe Riveter::Attributes do
         let(:instance) { subject.new() }
 
         it { instance.should ensure_inclusion_of(:product_type).in_array(TestEnum.values) }
-
-        it { should respond_to(:product_type_enum)}
-        it { subject.product_type_enum.should eq(TestEnum) }
-        it { should respond_to(:product_types)}
-        it { subject.product_types.should eq(TestEnum.collection)}
       end
     end
 
@@ -144,43 +139,22 @@ describe Riveter::Attributes do
       let(:expected_value) { {:c => 1, :d => 2} }
     end
 
-    it_should_behave_like "an attribute", :model, TestModel.new(), TestModel do
-      let(:assigned_value) { TestModel.new() }
+    it_should_behave_like "an attribute", :object, Object.new() do
+      let(:assigned_value) { Object.new() }
+    end
 
-      before do
-        allow_any_instance_of(TestModel).to receive(:valid?) { true }
-        allow(TestModel).to receive(:find_by)
-      end
+    it_should_behave_like "an attribute", :class, TestModel, [TestModel, TestModelWithAttributeDefaultValues] do
+      let(:assigned_value) { "TestModelWithAttributeDefaultValues" }
+      let(:expected_value) { TestModelWithAttributeDefaultValues }
 
       describe "additional" do
         before do
-          subject.attr_model :product, TestModel, :required => true
+          subject.attr_class :an_attribute, [TestModel, TestModelWithAttributeDefaultValues], :required => true
         end
+        let(:instance) { subject.new() }
 
-        it { should respond_to(:product_model)}
-        it { subject.product_model.should eq(TestModel) }
-
-        it {
-          allow(TestModel).to receive(:find_by).with(:id => 1) { assigned_value }
-
-          instance = subject.new()
-          instance.product = 1
-          instance.product.should eq(assigned_value)
-        }
-
-        it {
-          allow(TestModel).to receive(:find_by).with(:id => 1) { assigned_value }
-          expect(assigned_value).to receive(:valid?) { true }
-
-          instance = subject.new()
-          instance.product = 1
-          instance.valid?
-        }
+        it { instance.should ensure_inclusion_of(:an_attribute).in_array([TestModel, TestModelWithAttributeDefaultValues]) }
       end
-    end
-
-    it_should_behave_like "an attribute", :object, Object.new() do
-      let(:assigned_value) { Object.new() }
     end
   end
 
@@ -202,7 +176,6 @@ describe Riveter::Attributes do
         subject.enum.should eq(TestEnum::Member1)
         subject.array.should eq([1, 2, 3])
         subject.hash.should eq({:a => :b})
-        subject.model.should eq(TestModel)
         subject.object.should eq('whatever')
       end
     end
@@ -225,7 +198,6 @@ describe Riveter::Attributes do
           'enum' => TestEnum::Member1,
           'array' => [1, 2, 3],
           'hash' => {:a => :b},
-          'model' => TestModel,
           'object' => 'whatever'
         })
       }

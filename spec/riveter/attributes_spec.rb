@@ -84,6 +84,8 @@ describe Riveter::Attributes do
 
         it { instance.should respond_to(:an_attribute_to?) }
 
+        it { instance.should respond_to(:an_attribute_present?) }
+
         it {
           instance.an_attribute = nil
           instance.an_attribute_to?.should be_falsey
@@ -93,7 +95,85 @@ describe Riveter::Attributes do
           instance.an_attribute_to = Date.today
           instance.an_attribute_to?.should be_truthy
         }
+
+        it {
+          instance.an_attribute_from = Date.today
+          instance.an_attribute_to = Date.today
+          instance.an_attribute_present?.should be_truthy
+        }
+
+        it {
+          instance.an_attribute_from = nil
+          instance.an_attribute_to = Date.today
+          instance.an_attribute_present?.should be_falsey
+        }
+
+        it {
+          instance.an_attribute_from = Date.today
+          instance.an_attribute_to = nil
+          instance.an_attribute_present?.should be_falsey
+        }
+
+        it {
+          instance.an_attribute_from = Date.today
+          instance.an_attribute_to = Date.today
+          instance.an_attribute_present?.should be_truthy
+        }
+
       end
+
+      describe "#min" do
+        before do
+          subject.attr_date_range :an_attribute_value, :min => 1
+          subject.attr_date_range :an_attribute_block, :min => lambda { self.some_method }
+        end
+
+        let(:instance) { subject.new() }
+
+        it { instance.should respond_to(:an_attribute_value_min) }
+        it { instance.should respond_to(:an_attribute_value_min=) }
+
+        it {
+          instance.an_attribute_value_min.should eq(1)
+        }
+
+        it {
+          instance.an_attribute_value_min = 2
+          instance.an_attribute_value_min.should eq(2)
+        }
+
+        it "invokes the lambda in the context of self" do
+          expect(instance).to receive(:some_method)
+          instance.an_attribute_block_min
+        end
+      end
+
+      describe "#max" do
+        before do
+          subject.attr_date_range :an_attribute_value, :max => 1
+          subject.attr_date_range :an_attribute_block, :max => lambda { self.some_method }
+        end
+
+        let(:instance) { subject.new() }
+
+        it { instance.should respond_to(:an_attribute_value_max) }
+        it { instance.should respond_to(:an_attribute_value_max=) }
+
+        it {
+          instance.an_attribute_value_max.should eq(1)
+        }
+
+        it {
+          instance.an_attribute_value_max = 2
+          instance.an_attribute_value_max.should eq(2)
+        }
+
+        it "invokes the lambda in the context of self" do
+          expect(instance).to receive(:some_method)
+          instance.an_attribute_block_max
+        end
+      end
+
     end
 
     it_should_behave_like "an attribute", :time, Time.new(2010, 1, 12, 8, 4, 45) do
@@ -125,7 +205,7 @@ describe Riveter::Attributes do
         end
         let(:instance) { subject.new() }
 
-        it { instance.should ensure_inclusion_of(:product_type).in_array(TestEnum.values) }
+        it { instance.should validate_inclusion_of(:product_type).in_array(TestEnum.values) }
       end
     end
 
@@ -153,7 +233,7 @@ describe Riveter::Attributes do
         end
         let(:instance) { subject.new() }
 
-        it { instance.should ensure_inclusion_of(:an_attribute).in_array([TestModel, TestModelWithAttributeDefaultValues]) }
+        it { instance.should validate_inclusion_of(:an_attribute).in_array([TestModel, TestModelWithAttributeDefaultValues]) }
       end
     end
   end

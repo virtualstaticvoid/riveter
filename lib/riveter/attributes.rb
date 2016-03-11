@@ -69,8 +69,15 @@ module Riveter
           limit_value = options.delete(limit)
 
           define_method :"#{name}_#{limit}" do
-            limit_value.respond_to?(:call) ? limit_value.call : limit_value
+            instance_variable_get("@#{name}_#{limit}") ||
+              (limit_value.respond_to?(:call) ? instance_exec(&limit_value) : limit_value)
           end
+
+          # can manually assign the min/max
+          define_method :"#{name}_#{limit}=" do |value|
+            instance_variable_set("@#{name}_#{limit}", value)
+          end
+
         end
 
         converter = block_given? ? block : Converters.converter_for(:date)
@@ -129,22 +136,6 @@ module Riveter
           date_from = send(:"#{name}_from")
           date_to = send(:"#{name}_to")
           date_from && date_to
-        end
-
-        # return from and to as range in UTC
-        define_method :"#{name}_utc" do
-          date_from = send(:"#{name}_from")
-          date_to = send(:"#{name}_to")
-          if date_from && date_to
-            if date_from == date_to
-              date = date_from.to_utc_date
-              DateTime.new(date.year, date.month, date.day, 0, 0, 0)..DateTime.new(date.year, date.month, date.day, 23, 59, 59)
-            else
-              date_from.to_utc_date..date_to.to_utc_date
-            end
-          else
-            nil
-          end
         end
 
       end
@@ -310,20 +301,20 @@ module Riveter
       end
 
       def add_attr(name, type, converter=nil, options={})
-        self._attributes[name] = attribute_info = AttributeInfo.new(name, type, converter, options)
+        self._attributes[name] = attribute_info = AttributeInfo.new(self, name, type, converter, options)
         validates name, :presence => true if attribute_info.required?
         attribute_info
       end
     end
 
-    class AttributeInfo < Struct.new(:name, :type, :converter, :options)
+    class AttributeInfo < Struct.new(:target, :name, :type, :converter, :options)
       def required?
         @required ||= (options[:required] == true)
       end
 
       def default
         @default ||= options[:default]
-        @default.respond_to?(:call) ? @default.call : @default
+        @default.respond_to?(:call) ? target.instance_eval(&@default) : @default
       end
 
       def default?

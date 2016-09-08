@@ -278,7 +278,8 @@ describe Riveter::Attributes do
           'enum' => TestEnum::Member1,
           'array' => [1, 2, 3],
           'hash' => {:a => :b},
-          'object' => 'whatever'
+          'object' => 'whatever',
+          'with_lambda_default' => subject
         })
       }
     end

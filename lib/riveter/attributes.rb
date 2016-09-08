@@ -314,11 +314,14 @@ module Riveter
 
       def default
         @default ||= options[:default]
-        @default.respond_to?(:call) ? target.instance_eval(&@default) : @default
       end
 
       def default?
         !self.default.nil?
+      end
+
+      def evaluate_default(scope)
+        default? && default.respond_to?(:call) ? scope.instance_exec(&default) : default
       end
     end
 
@@ -328,8 +331,7 @@ module Riveter
       # assign default values
       self.class._attributes.each do |name, attribute_info|
         next unless attribute_info.default?
-        value = attribute_info.default
-        send("#{name}=", value.respond_to?(:call) ? value.call : value)
+        send("#{name}=", attribute_info.evaluate_default(self))
       end
 
       @options = options.freeze

@@ -17,4 +17,6 @@ class TestClassWithAttributes
   attr_hash :hash, :default => {:a => :b}
   attr_object :object, :default => 'whatever'
 
+  attr_object :with_lambda_default, :default => lambda { self }
+
 end

@@ -23,11 +23,19 @@ describe Riveter::AttributeDefaultValues do
 
       it "should have own registration" do
         expect {
-          Class.new(ActiveRecord::Base).class_eval do |klass|
+          Class.new.class_eval do |klass|
+
+            # provide mock method for after_initialize
+            class << self
+              def after_initialize(*args)
+              end
+            end
+
             include Riveter::AttributeDefaultValues
 
             attr_accessor :attr_name
             default_value_for :attr_name, 1
+
           end
         }.to_not change { subject.attribute_defaults.length }
       end

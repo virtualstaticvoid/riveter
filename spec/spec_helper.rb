@@ -15,7 +15,6 @@ SimpleCov.start do
 end
 
 require 'pry'
-require 'active_record'
 
 require 'riveter'
 require 'riveter/spec_helper'
@@ -25,8 +24,17 @@ require 'riveter/form_builder_extensions'
 require 'riveter/command_routes'
 require 'riveter/enquiry_routes'
 
-require 'rails/all'
+# require 'rails/all'
+
+# require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_view/railtie'
+# require 'action_mailer/railtie'
+# require 'active_job/railtie'
+# require 'rails/test_unit/railtie'
+# require 'sprockets/railtie'
 require 'rails/generators'
+
 require 'haml'
 
 require 'shoulda/matchers'
@@ -50,6 +58,7 @@ RSpec.configure do |config|
 
   # config.order = :random
   config.fail_fast = (ENV["FAIL_FAST"] == 1)
+
 end
 
 # require examples, must happen after configure for RSpec 3

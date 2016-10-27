@@ -450,7 +450,7 @@ module Riveter
 
         when :enum
           lambda {|enum, v, opt|
-            enum.values.include?(v) ? v : enum.value_for(v)
+            enum.values.include?(v) ? enum.value_for(v) : v
           }.curry[options[:enum]]
 
         when :class

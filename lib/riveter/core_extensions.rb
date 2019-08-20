@@ -119,9 +119,9 @@ module Riveter
       # When both +hsh+ and +other_hash+ contains an entry with the same key,
       # it merges and returns the values from both arrays.
       #
-      #    h1 = {"a" => 100, "b" => 200, "c" => {"c1" => 12, "c2" => 14}}
-      #    h2 = {"b" => 254, "c" => 300, "c" => {"c1" => 16, "c3" => 94}}
-      #    h1.rmerge!(h2)   #=> {"a" => 100, "b" => 254, "c" => {"c1" => 16, "c2" => 14, "c3" => 94}}
+      #    h1 = {"a" => 100, "b" => 200, "c" => {"c1" => 12, "c2" => 14}, "d" => {"d1" => 400}}
+      #    h2 = {"b" => 254, "c" => 300, "c" => {"c1" => 16, "c3" => 94}, "d" => nil}
+      #    h1.rmerge!(h2)   #=> {"a" => 100, "b" => 254, "c" => {"c1" => 16, "c2" => 14, "c3" => 94}, "d" => nil}
       #
       # Simply using Hash#merge! would return
       #
@@ -146,15 +146,17 @@ module Riveter
       # includes the same key, the value is merged instead replaced with
       # +other_hash+ value.
       #
-      #    h1 = {"a" => 100, "b" => 200, "c" => {"c1" => 12, "c2" => 14}}
-      #    h2 = {"b" => 254, "c" => 300, "c" => {"c1" => 16, "c3" => 94}}
-      #    h1.rmerge(h2)    #=> {"a" => 100, "b" => 254, "c" => {"c1" => 16, "c2" => 14, "c3" => 94}}
+      #    h1 = {"a" => 100, "b" => 200, "c" => {"c1" => 12, "c2" => 14}, "d" => {"d1" => 400}}
+      #    h2 = {"b" => 254, "c" => 300, "c" => {"c1" => 16, "c3" => 94}, "d" => nil}
+      #    h1.rmerge(h2)    #=> {"a" => 100, "b" => 254, "c" => {"c1" => 16, "c2" => 14, "c3" => 94}, "d" => nil}
       #
       # Simply using Hash#merge would return
       #
       #    h1.merge(h2)     #=> {"a" => 100, "b" = >254, "c" => {"c1" => 16, "c3" => 94}}
       #
       def rmerge(other_hash)
+        return nil if other_hash.nil?
+
         r = {}
         merge(other_hash)  do |key, oldval, newval|
           r[key] = oldval.class == self.class ? oldval.rmerge(newval) : newval

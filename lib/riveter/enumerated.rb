@@ -4,7 +4,7 @@ module Riveter
 
     included do
 
-      const_names = self.constants(false).freeze
+      const_names = self.constants(false).sort.freeze
       const_values = const_names.collect {|name| self.const_get(name) }.freeze
 
       # create hashes for decoding names and values
